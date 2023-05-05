@@ -3,7 +3,7 @@ const path = require("path");
 const whiteExtentions = [".png", ".jpeg", ".jpg"];
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploadsss" + req.url);
+    cb(null, path.join(__dirname , '../../' , 'uploads' , req.url ));
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
