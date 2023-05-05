@@ -9,7 +9,6 @@ module.exports.getAll = (req, res, next) => {
 module.exports.getOneById = (req, res, next) => {
   Teacher.findById(req.params["id"])
     .then((teacher) => {
-      console.log(teacher);
       if (!teacher) throw new Error("teacher does't exist");
       res.status(200).json({
         message: "get teacher data",

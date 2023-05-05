@@ -6,7 +6,8 @@ const app = require("./src/app");
 mongoose
   .connect(process.env.MONGO_PATH)
 
-  .then(() => {
+  .then((err) => {
+    if (err) console.log("something go wrong with db server");
     console.log("db connection sucess");
     http.createServer(app).listen(PORT, () => {
       console.log("server  running on port ", PORT);

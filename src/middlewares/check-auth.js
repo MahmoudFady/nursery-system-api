@@ -1,5 +1,5 @@
 const jwtUtil = require("../utils/jwt-token");
-const generateRoleAuth = (req, next, condition) => {
+const generateRoleAuth = (condition, next) => {
   if (condition) return next();
   const err = new Error("Action not allowed for you ");
   err.status = 401;
@@ -19,13 +19,16 @@ module.exports = (req, res, next) => {
 };
 module.exports.isAdmin = (req, res, next) => {
   const role = req["user"].role;
-  return generateRoleAuth(next, role === "admin");
+  const condition = role === "admin";
+  return generateRoleAuth(condition, next);
 };
 module.exports.isTeacher = (req, res, next) => {
   const role = req["user"].role;
-  return generateRoleAuth(next, role === "teacher");
+  const condition = role === "teacher";
+  return generateRoleAuth(condition, next);
 };
 module.exports.isAdminOrTeacher = (req, res, next) => {
   const role = req["user"].role;
-  return generateRoleAuth(next, role === "admin" || role === "teacher");
+  const condition = role === "admin" || role === "teacher";
+  return generateRoleAuth(condition, next);
 };
