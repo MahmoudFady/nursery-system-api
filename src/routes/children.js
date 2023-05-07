@@ -18,6 +18,6 @@ router
   .delete(validator.isMongoId, validationResult, controller.deleteOne);
 router
   .route("/children/:id/class")
-  .all(chekcAuth, chekcAuth.isAdmin)
+  .all(chekcAuth, chekcAuth.isAdminOrSupervisor)
   .get(validator.isMongoId, validationResult, controller.getClass);
 module.exports = router;

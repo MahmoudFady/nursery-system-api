@@ -4,6 +4,7 @@ const Class = require("../models/class");
 const fileUtil = require("../utils/file");
 module.exports.getAll = (req, res, next) => {
   Teacher.find()
+    .select("-password")
     .then((teachers) => {
       res.status(200).json({ message: "get all teachers", teachers });
     })

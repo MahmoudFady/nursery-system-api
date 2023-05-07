@@ -35,7 +35,7 @@ module.exports.isAdminOrTeacher = (req, res, next) => {
 };
 module.exports.isAdminOrSupervisor = async (req, res, next) => {
   const role = req.user.role;
-  const teacherId = req.user._id;
+  const teacherId = req.user.id;
   const classId = req.params["id"];
   let isSupervisor;
   if (role === "teacher") {
@@ -49,7 +49,7 @@ module.exports.isAdminOrSupervisor = async (req, res, next) => {
 };
 module.exports.isAdminOrAllowedTeacher = (req, res, next) => {
   const role = req.user.role;
-  const isAuthTeacher = req.user._id == req.params["id"];
+  const isAuthTeacher = req.user.id == req.params["id"];
   if (role === "admin" || isAuthTeacher) return next();
   const err = new Error("Action not allowed for you ");
   err.status = 401;
