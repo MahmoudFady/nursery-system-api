@@ -18,7 +18,8 @@ module.exports.getOneById = (req, res, next) => {
 };
 module.exports.insertOne = (req, res, next) => {
   const { fullName, age, level, address } = req.body;
-  new Children({ _id: Date.now(), fullName, age, level, address })
+  const _id = Date.now() + Math.random() * 100;
+  new Children({ _id, fullName, age, level, address })
     .save()
     .then((child) => {
       res.status(200).json({ message: "get all children", child });

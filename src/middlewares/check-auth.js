@@ -1,4 +1,5 @@
 const jwtUtil = require("../utils/jwt-token");
+const Class = require("../models/class");
 const generateRoleAuth = (condition, next) => {
   if (condition) return next();
   const err = new Error("Action not allowed for you ");
@@ -31,4 +32,26 @@ module.exports.isAdminOrTeacher = (req, res, next) => {
   const role = req["user"].role;
   const condition = role === "admin" || role === "teacher";
   return generateRoleAuth(condition, next);
+};
+module.exports.isAdminOrSupervisor = async (req, res, next) => {
+  const role = req.user.role;
+  const teacherId = req.user._id;
+  const classId = req.params["id"];
+  let isSupervisor;
+  if (role === "teacher") {
+    isSupervisor =
+      (await Class.findOne({ _id: classId, teacher: teacherId })) || false;
+  }
+  if (role === "admin" || isSupervisor) return next();
+  const err = new Error("Action not allowed for you ");
+  err.status = 401;
+  throw err;
+};
+module.exports.isAdminOrAllowedTeacher = (req, res, next) => {
+  const role = req.user.role;
+  const isAuthTeacher = req.user._id == req.params["id"];
+  if (role === "admin" || isAuthTeacher) return next();
+  const err = new Error("Action not allowed for you ");
+  err.status = 401;
+  throw err;
 };

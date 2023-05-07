@@ -15,7 +15,8 @@ module.exports.getOneById = (req, res, next) => {
 };
 module.exports.insertOne = (req, res, next) => {
   const { name, teacher, children } = req.body;
-  new Class({ _id: Date.now(), name, teacher, children })
+  const _id = Date.now() + Math.random() * 100;
+  new Class({ _id, name, teacher, children })
     .save()
     .then((newClass) => {
       res.status(201).json({ message: "class created", class: newClass });

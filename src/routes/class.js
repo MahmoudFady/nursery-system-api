@@ -12,7 +12,7 @@ router
   .post(validator.insert, validationResult, controller.insertOne);
 router
   .route("/class/:id")
-  .all(checkAuth)
+  .all(checkAuth, checkAuth.isAdminOrSupervisor)
   .get(
     checkAuth.isAdminOrTeacher,
     validator.isMongoId,
@@ -37,7 +37,12 @@ router
   .get(validator.isMongoId, validationResult, controller.getChildren);
 router
   .route("/class/:id/teacher")
-  .all(checkAuth, checkAuth.isAdmin)
-  .get(validator.isMongoId, validationResult, controller.getTeacher);
+  .all(checkAuth)
+  .get(
+    validator.isMongoId,
+    validationResult,
+    checkAuth.isAdminOrSupervisor,
+    controller.getTeacher
+  );
 
 module.exports = router;

@@ -13,25 +13,22 @@ router
   .post(imageUpload.single("image"), controller.insertOne);
 router
   .route("/teachers/supervise")
-  .all(checkAuth, checkAuth.isAdminOrTeacher)
+  .all(checkAuth, checkAuth.isAdmin)
   .get(validator.isMongoId, validationResult, controller.getClasses);
 router
   .route("/teachers/:id")
-  .all(checkAuth)
+  .all(checkAuth, checkAuth.isAdminOrAllowedTeacher)
   .get(
-    checkAuth.isAdminOrTeacher,
     validator.isMongoId,
     validationResult,
     controller.getOneById
   )
   .patch(
-    checkAuth.isAdminOrTeacher,
     validator.update,
     validationResult,
     controller.patchOne
   )
   .delete(
-    checkAuth.isAdmin,
     validator.isMongoId,
     validationResult,
     controller.deleteOne

@@ -1,4 +1,6 @@
 const Teacher = require("../models/teacher");
+const Class = require("../models/class");
+
 const fileUtil = require("../utils/file");
 module.exports.getAll = (req, res, next) => {
   Teacher.find()
@@ -45,8 +47,22 @@ module.exports.deleteOne = (req, res, next) => {
     .catch((err) => next(err));
 };
 module.exports.patchOne = (req, res, next) => {
+  const data = req.body;
+  Teacher.findByIdAndUpdate(req.params["id"], data)
+    .then((data) => {
+      if (!data) throw "teacher does not exist";
+      res.status(200).json({ message: "teacher updated" });
+    })
+    .catch((err) => next(err));
   res.status(200).json({ message: "delete one" });
 };
 module.exports.getClasses = (req, res, next) => {
-  res.status(200).json({ message: "get superviced classes" });
+  Class.find()
+    .populate({
+      path: "teacher",
+    })
+    .then((data) => {
+      res.status(200).json({ message: "get superviced classes", data });
+    })
+    .catch((err) => next(err));
 };
